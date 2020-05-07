@@ -39,7 +39,7 @@ export interface RouteEntry {
 
 export interface InternalRouterState {
   url: URL;
-  selectedRoute?: RouteEntry;
+  activeRoute?: RouteEntry;
   urlParams: { [key: string]: string };
   routes: RouteEntry[];
 }

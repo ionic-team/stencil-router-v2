@@ -12,9 +12,10 @@ import type {
 let defaultRouter: Router | undefined;
 
 export const createRouter = (opts?: RouterOptions): Router => {
+  const win = window;
   const { state, onChange, dispose } = createStore<InternalRouterState>(
     {
-      url: new URL(window.location.href),
+      url: new URL(win.location.href),
       urlParams: {},
       routes: [],
     },
@@ -43,7 +44,7 @@ export const createRouter = (opts?: RouterOptions): Router => {
           push(route.to);
           return;
         } else {
-          state.selectedRoute = route;
+          state.activeRoute = route;
           state.urlParams = params;
           break;
         }
@@ -52,12 +53,12 @@ export const createRouter = (opts?: RouterOptions): Router => {
   };
 
   const navigationChanged = () => {
-    state.url = new URL(document.location.href);
+    state.url = new URL(win.location.href);
   };
 
   const Cmp: any = (_: any, childrenRoutes: RouteEntry[]) => {
     state.routes = childrenRoutes;
-    const selectedRoute = state.selectedRoute;
+    const selectedRoute = state.activeRoute;
     if (selectedRoute) {
       if (typeof selectedRoute.jsx === 'function') {
         return selectedRoute.jsx(state.urlParams);
@@ -69,7 +70,7 @@ export const createRouter = (opts?: RouterOptions): Router => {
 
   const disposeRouter = () => {
     defaultRouter = undefined;
-    window.removeEventListener('popstate', navigationChanged);
+    win.removeEventListener('popstate', navigationChanged);
     dispose();
   };
 
@@ -85,7 +86,7 @@ export const createRouter = (opts?: RouterOptions): Router => {
   onChange('url', match);
 
   // Listen URL changes
-  window.addEventListener('popstate', navigationChanged);
+  win.addEventListener('popstate', navigationChanged);
 
   // Initial update
   navigationChanged();

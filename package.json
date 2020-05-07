@@ -1,5 +1,5 @@
 {
-  "name": "@stencil/router-v2",
+  "name": "stencil-router-v2",
   "version": "0.0.1",
   "description": "New router based in @stencil/store",
   "main": "dist/index.js",
@@ -38,7 +38,7 @@
     "jest-cli": "24.9.0",
     "np": "^6.2.0",
     "prettier": "^2.0.2",
-    "rollup": "^2.3.2",
+    "rollup": "^2.8.2",
     "ts-jest": "^25.3.0",
     "typescript": "^3.8.3"
   },
