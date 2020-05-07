@@ -49,61 +49,24 @@ export interface RouterOptions {
 
 let defaultRouter: Router | undefined;
 
-export const createHashRouter = (): Router => {
-  return createRouter({
-    serializeURL: (path) => {
-      return new URL(`#${path}`, document.location.href);
-    },
-    parseURL: (url) => {
-      const path = url.href.substr(1);
-      if (path[0] !== '/') {
-        return '/' + path;
-      }
-      return path;
-    }
-  })
-}
-
-
 export const createRouter = (opts?: RouterOptions): Router => {
-  const parseURL = opts?.parseURL ?? DEFAULT_PARSE_URL;
-  const defaultState = {
+  const { state, onChange, dispose } = createStore<InternalRouterState>({
     url: new URL(window.location.href),
     urlParams: {},
     routes: []
-  };
-  const { state, onChange, dispose } = createStore<InternalRouterState>(defaultState, (newV, oldV, prop) => {
+  }, (newV, oldV, prop) => {
     if (prop === 'url') {
       return newV.href !== oldV.href;
     }
     return newV !== oldV;
   });
 
+  const parseURL = opts?.parseURL ?? DEFAULT_PARSE_URL;
+
   const push = (href: string) => {
     history.pushState(null, null as any, href);
     state.url = new URL(href, document.baseURI);
   };
-
-  const matchPath = (pathname: string, path: RoutePath) => {
-    if (typeof path === 'string') {
-      if (path === pathname) {
-        return {};
-      }
-    } else if (typeof path === 'function') {
-      const params = path(pathname);
-      if (params != undefined) {
-        return {...params};
-      }
-    } else {
-      const results = path.exec(pathname);
-      if (results) {
-        path.lastIndex = 0;
-        return {...results.groups};
-      }
-    }
-    return undefined;
-  };
-
 
   const match = () => {
     const {routes, url} = state;
@@ -127,6 +90,31 @@ export const createRouter = (opts?: RouterOptions): Router => {
     state.url = new URL(document.location.href);
   };
 
+  const Cmp: any = (_: any, childrenRoutes: RouteEntry[]) => {
+    state.routes = childrenRoutes;
+    const selectedRoute = state.selectedRoute;
+    if (selectedRoute) {
+      if (typeof selectedRoute.jsx === 'function') {
+        return selectedRoute.jsx(state.urlParams);
+      } else {
+        return selectedRoute.jsx;
+      }
+    }
+  };
+
+  const disposeRouter = () => {
+    defaultRouter = undefined;
+    window.removeEventListener('popstate', navigationChanged);
+    dispose();
+  };
+
+  const router = defaultRouter= {
+    Cmp,
+    state,
+    push,
+    dispose: disposeRouter,
+  };
+
   // Listen for state changes
   onChange('routes', match);
   onChange('url', match);
@@ -137,31 +125,6 @@ export const createRouter = (opts?: RouterOptions): Router => {
   // Initial update
   navigationChanged();
 
-  const Cmp: any = (_: any, childrenRoutes: RouteEntry[]) => {
-    state.routes = childrenRoutes;
-    const selectedRoute = state.selectedRoute;
-    if (selectedRoute) {
-      if (typeof selectedRoute.jsx === 'function') {
-        return selectedRoute.jsx(state.urlParams);
-      } else {
-        return selectedRoute.jsx as any;
-      }
-    }
-  };
-
-  const router = defaultRouter= {
-    Cmp,
-    state,
-    dispose: () => {
-      defaultRouter = undefined;
-      window.removeEventListener('popstate', navigationChanged);
-      dispose();
-    },
-    push: (href: string) => {
-      state.url = new URL(href, document.baseURI);
-      history.pushState(null, null as any, href);
-    }
-  };
   return router;
 };
 
@@ -171,17 +134,15 @@ export const Route: FunctionalComponent<RouteProps> = (props, children) => {
     return {
       path: props.path,
       to: props.to
-    };
-  } else {
-    if (Build.isDev && props.render && children.length > 0) {
-      console.warn('Route: if `render` is provided, the component should not have any childreen');
-    }
-    const route: RouteEntry = {
-      path: props.path,
-      jsx: props.render ?? children,
-    };
-    return route as any;
+    } as any;
   }
+  if (Build.isDev && props.render && children.length > 0) {
+    console.warn('Route: if `render` is provided, the component should not have any childreen');
+  }
+  return {
+    path: props.path,
+    jsx: props.render ?? children,
+  } as any;
 }
 
 export const href = (href: string, router: Router | undefined = defaultRouter) => {
@@ -195,6 +156,26 @@ export const href = (href: string, router: Router | undefined = defaultRouter) =
       router.push(href);
     }
   }
+};
+
+const matchPath = (pathname: string, path: RoutePath) => {
+  if (typeof path === 'string') {
+    if (path === pathname) {
+      return {};
+    }
+  } else if (typeof path === 'function') {
+    const params = path(pathname);
+    if (params != undefined) {
+      return {...params};
+    }
+  } else {
+    const results = path.exec(pathname);
+    if (results) {
+      path.lastIndex = 0;
+      return {...results.groups};
+    }
+  }
+  return undefined;
 };
 
 const DEFAULT_PARSE_URL = (url: URL) => {
