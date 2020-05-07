@@ -1,6 +1,9 @@
-import { FunctionalComponent } from "@stencil/core";
+import { FunctionalComponent } from '@stencil/core';
 
-export type RoutePath = string | RegExp | ((path: string) => {[params: string]: string} | undefined);
+export type RoutePath =
+  | string
+  | RegExp
+  | ((path: string) => { [params: string]: string } | undefined);
 
 export type RouterState = Readonly<InternalRouterState>;
 
@@ -20,7 +23,7 @@ export type RouteProps = RenderProps | RedirectProps;
 
 export interface RenderProps {
   path: RoutePath;
-  render?: (params: {[param: string]: string}) => any;
+  render?: (params: { [param: string]: string }) => any;
 }
 
 export interface RedirectProps {
@@ -37,7 +40,7 @@ export interface RouteEntry {
 export interface InternalRouterState {
   url: URL;
   selectedRoute?: RouteEntry;
-  urlParams: {[key: string]: string};
+  urlParams: { [key: string]: string };
   routes: RouteEntry[];
 }
 

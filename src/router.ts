@@ -1,20 +1,30 @@
 import { FunctionalComponent, Build } from '@stencil/core';
 import { createStore } from '@stencil/store';
-import type {Router, RouterOptions, InternalRouterState, RouteEntry, RouteProps, RoutePath, } from './types';
+import type {
+  Router,
+  RouterOptions,
+  InternalRouterState,
+  RouteEntry,
+  RouteProps,
+  RoutePath,
+} from './types';
 
 let defaultRouter: Router | undefined;
 
 export const createRouter = (opts?: RouterOptions): Router => {
-  const { state, onChange, dispose } = createStore<InternalRouterState>({
-    url: new URL(window.location.href),
-    urlParams: {},
-    routes: []
-  }, (newV, oldV, prop) => {
-    if (prop === 'url') {
-      return newV.href !== oldV.href;
+  const { state, onChange, dispose } = createStore<InternalRouterState>(
+    {
+      url: new URL(window.location.href),
+      urlParams: {},
+      routes: [],
+    },
+    (newV, oldV, prop) => {
+      if (prop === 'url') {
+        return newV.href !== oldV.href;
+      }
+      return newV !== oldV;
     }
-    return newV !== oldV;
-  });
+  );
 
   const parseURL = opts?.parseURL ?? DEFAULT_PARSE_URL;
 
@@ -24,7 +34,7 @@ export const createRouter = (opts?: RouterOptions): Router => {
   };
 
   const match = () => {
-    const {routes, url} = state;
+    const { routes, url } = state;
     const pathname = parseURL(url);
     for (let route of routes) {
       const params = matchPath(pathname, route.path);
@@ -63,12 +73,12 @@ export const createRouter = (opts?: RouterOptions): Router => {
     dispose();
   };
 
-  const router = defaultRouter= {
+  const router = (defaultRouter = {
     Cmp,
     state,
     push,
     dispose: disposeRouter,
-  };
+  });
 
   // Listen for state changes
   onChange('routes', match);
@@ -83,12 +93,11 @@ export const createRouter = (opts?: RouterOptions): Router => {
   return router;
 };
 
-
 export const Route: FunctionalComponent<RouteProps> = (props, children) => {
   if ('to' in props) {
     return {
       path: props.path,
-      to: props.to
+      to: props.to,
     } as any;
   }
   if (Build.isDev && props.render && children.length > 0) {
@@ -98,7 +107,7 @@ export const Route: FunctionalComponent<RouteProps> = (props, children) => {
     path: props.path,
     jsx: props.render ?? children,
   } as any;
-}
+};
 
 export const href = (href: string, router: Router | undefined = defaultRouter) => {
   if (!router) {
@@ -109,8 +118,8 @@ export const href = (href: string, router: Router | undefined = defaultRouter) =
     onClick: (ev: Event) => {
       ev.preventDefault();
       router.push(href);
-    }
-  }
+    },
+  };
 };
 
 const matchPath = (pathname: string, path: RoutePath) => {
@@ -121,13 +130,13 @@ const matchPath = (pathname: string, path: RoutePath) => {
   } else if (typeof path === 'function') {
     const params = path(pathname);
     if (params != undefined) {
-      return {...params};
+      return { ...params };
     }
   } else {
     const results = path.exec(pathname);
     if (results) {
       path.lastIndex = 0;
-      return {...results.groups};
+      return { ...results.groups };
     }
   }
   return undefined;
