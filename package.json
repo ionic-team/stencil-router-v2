@@ -10,7 +10,7 @@
     "lint.prettier": "prettier --write 'src/**/*.ts'",
     "release": "np",
     "rollup": "rollup -c rollup.config.js",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "test.ci": "npm run test && npm run test.prettier",
     "test.prettier": "prettier --check 'src/**/*.ts'",
     "version": "npm run build"
