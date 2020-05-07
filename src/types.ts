@@ -3,7 +3,7 @@ import { FunctionalComponent } from '@stencil/core';
 export type RoutePath =
   | string
   | RegExp
-  | ((path: string) => { [params: string]: string } | undefined);
+  | ((path: string) => { [params: string]: string } | boolean | undefined | null);
 
 export type RouterState = Readonly<InternalRouterState>;
 

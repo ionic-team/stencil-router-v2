@@ -130,8 +130,10 @@ const matchPath = (pathname: string, path: RoutePath) => {
     }
   } else if (typeof path === 'function') {
     const params = path(pathname);
-    if (params != undefined) {
-      return { ...params };
+    if (params) {
+      return params === true
+        ? {}
+        : { ...params };
     }
   } else {
     const results = path.exec(pathname);
