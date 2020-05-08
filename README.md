@@ -1,4 +1,4 @@
-# stencil-route-v2
+# stencil-router-v2
 
 Stencil Router V2 is an experimental new router for stencil that focus in:
 
@@ -12,7 +12,7 @@ Stencil Router V2 is an experimental new router for stencil that focus in:
 
 This router backs up the `document.location` in a `@stencil/store`, this way we can respond to changes in document.location is a much simpler, way, not more subscribes, no more event listeners events to connect and disconnect.
 
-Functional Components are the used to collect the list of routes, finally the `Switch` rendes only the selected route.
+Functional Components are the used to collect the list of routes, finally the `Switch` renders only the selected route.
 
 
 ## Install
