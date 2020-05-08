@@ -9,7 +9,7 @@ export type RouterState = Readonly<InternalRouterState>;
 
 export interface Router {
   readonly state: Readonly<RouterState>;
-  readonly Cmp: FunctionalComponent<{}>;
+  readonly Switch: FunctionalComponent<{}>;
 
   dispose(): void;
   push(href: string): void;

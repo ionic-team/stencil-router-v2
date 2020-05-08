@@ -56,7 +56,7 @@ export const createRouter = (opts?: RouterOptions): Router => {
     state.url = new URL(win.location.href);
   };
 
-  const Cmp: any = (_: any, childrenRoutes: RouteEntry[]) => {
+  const Switch: any = (_: any, childrenRoutes: RouteEntry[]) => {
     state.routes = childrenRoutes;
     const selectedRoute = state.activeRoute;
     if (selectedRoute) {
@@ -74,22 +74,22 @@ export const createRouter = (opts?: RouterOptions): Router => {
     dispose();
   };
 
-  const router = (defaultRouter = {
-    Cmp,
+  const router = defaultRouter = {
+    Switch,
     state,
     push,
     dispose: disposeRouter,
-  });
+  };
 
   // Listen for state changes
   onChange('routes', match);
   onChange('url', match);
 
-  // Listen URL changes
-  win.addEventListener('popstate', navigationChanged);
-
   // Initial update
   navigationChanged();
+
+  // Listen URL changes
+  win.addEventListener('popstate', navigationChanged);
 
   return router;
 };
@@ -111,7 +111,7 @@ export const Route: FunctionalComponent<RouteProps> = (props, children) => {
 };
 
 export const href = (href: string, router: Router | undefined = defaultRouter) => {
-  if (!router) {
+  if (Build.isDev && !router) {
     throw new Error('Router must be defined in href');
   }
   return {
@@ -123,7 +123,7 @@ export const href = (href: string, router: Router | undefined = defaultRouter) =
   };
 };
 
-const matchPath = (pathname: string, path: RoutePath) => {
+const matchPath = (pathname: string, path: RoutePath): {[params: string]: any} => {
   if (typeof path === 'string') {
     if (path === pathname) {
       return {};
@@ -139,7 +139,7 @@ const matchPath = (pathname: string, path: RoutePath) => {
     const results = path.exec(pathname);
     if (results) {
       path.lastIndex = 0;
-      return { ...results.groups };
+      return { ...results };
     }
   }
   return undefined;
