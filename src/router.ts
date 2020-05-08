@@ -78,6 +78,7 @@ export const createRouter = (opts?: RouterOptions): Router => {
     Switch,
     state,
     push,
+    onChange: onChange as any,
     dispose: disposeRouter,
   };
 

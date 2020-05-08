@@ -7,11 +7,15 @@ export type RoutePath =
 
 export type RouterState = Readonly<InternalRouterState>;
 
-export interface Router {
+export type OnChangeHandler<T extends keyof InternalRouterState> = (newValue: InternalRouterState[T], oldValue: InternalRouterState[T]) => void;
+
+  export interface Router {
   readonly state: Readonly<RouterState>;
   readonly Switch: FunctionalComponent<{}>;
 
   dispose(): void;
+  onChange(key: 'url', cb: OnChangeHandler<'url'>);
+  onChange(key: 'activeRoute', cb: OnChangeHandler<'activeRoute'>);
   push(href: string): void;
 }
 
