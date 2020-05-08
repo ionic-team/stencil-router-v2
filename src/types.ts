@@ -23,6 +23,7 @@ export type RouteProps = RenderProps | RedirectProps;
 
 export interface RenderProps {
   path: RoutePath;
+  id?: string;
   render?: (params: { [param: string]: string }) => any;
 }
 
@@ -35,6 +36,7 @@ export interface RouteEntry {
   path: RoutePath;
   jsx?: any;
   to?: string;
+  id?: string;
 }
 
 export interface InternalRouterState {

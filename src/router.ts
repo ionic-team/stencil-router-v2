@@ -106,6 +106,7 @@ export const Route: FunctionalComponent<RouteProps> = (props, children) => {
   }
   return {
     path: props.path,
+    id: props.id,
     jsx: props.render ?? children,
   } as any;
 };
