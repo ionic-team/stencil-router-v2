@@ -15,6 +15,12 @@ This router backs up the `document.location` in a `@stencil/store`, this way we 
 Functional Components are the used to collect the list of routes, finally the `Switch` rendes only the selected route.
 
 
+## Install
+
+```bash
+npm install stencil-router-v2 --save-dev
+```
+
 ## Examples
 
 ```tsx
