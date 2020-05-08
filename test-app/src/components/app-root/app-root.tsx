@@ -1,5 +1,5 @@
 import { Component, Prop, Host, h } from '@stencil/core';
-import { Route, href } from '@stencil/router-v2';
+import { Route, href } from 'stencil-router-v2';
 import { Router } from '../../router';
 
 @Component({
@@ -13,7 +13,7 @@ export class AppRoot {
   render() {
     return (
       <Host>
-        <Router.Cmp>
+        <Router.Switch>
           {this.logged
             ? [
               <Route path="/" to="/account"/>,
@@ -41,7 +41,7 @@ export class AppRoot {
             )}
           />
 
-        </Router.Cmp>
+        </Router.Switch>
       </Host>
     );
   }

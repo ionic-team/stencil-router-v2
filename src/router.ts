@@ -13,57 +13,54 @@ let defaultRouter: Router | undefined;
 
 export const createRouter = (opts?: RouterOptions): Router => {
   const win = window;
-  const { state, onChange, dispose } = createStore<InternalRouterState>(
-    {
-      url: new URL(win.location.href),
-      urlParams: {},
-      routes: [],
-    },
-    (newV, oldV, prop) => {
-      if (prop === 'url') {
-        return newV.href !== oldV.href;
-      }
-      return newV !== oldV;
-    }
-  );
-
+  const url = new URL(win.location.href);
   const parseURL = opts?.parseURL ?? DEFAULT_PARSE_URL;
+  const { state, onChange, dispose } = createStore<InternalRouterState>({
+    url,
+    activePath: parseURL(url)
+  }, (newV, oldV, prop) => {
+    if (prop === 'url') {
+      return newV.href !== oldV.href;
+    }
+    return newV !== oldV;
+  });
 
   const push = (href: string) => {
     history.pushState(null, null as any, href);
-    state.url = new URL(href, document.baseURI);
+    const url = new URL(href, document.baseURI);
+    state.url = url;
+    state.activePath = parseURL(url);
   };
 
-  const match = () => {
-    const { routes, url } = state;
-    const pathname = parseURL(url);
+  const match = (routes: RouteEntry[], ) => {
+    const { activePath } = state;
     for (let route of routes) {
-      const params = matchPath(pathname, route.path);
+      const params = matchPath(activePath, route.path);
       if (params) {
         if (route.to != null) {
           push(route.to);
-          return;
+          return match(routes);
         } else {
-          state.activeRoute = route;
-          state.urlParams = params;
-          break;
+          return {params, route};
         }
       }
     }
+    return undefined;
   };
 
   const navigationChanged = () => {
-    state.url = new URL(win.location.href);
+    const url = new URL(win.location.href);
+    state.url = url;
+    state.activePath = parseURL(url);
   };
 
   const Switch: any = (_: any, childrenRoutes: RouteEntry[]) => {
-    state.routes = childrenRoutes;
-    const selectedRoute = state.activeRoute;
-    if (selectedRoute) {
-      if (typeof selectedRoute.jsx === 'function') {
-        return selectedRoute.jsx(state.urlParams);
+    const result = match(childrenRoutes);
+    if (result) {
+      if (typeof result.route.jsx === 'function') {
+        return result.route.jsx(result.params);
       } else {
-        return selectedRoute.jsx;
+        return result.route.jsx;
       }
     }
   };
@@ -76,15 +73,16 @@ export const createRouter = (opts?: RouterOptions): Router => {
 
   const router = defaultRouter = {
     Switch,
-    state,
+    get url() {
+      return state.url;
+    },
+    get activePath() {
+      return state.activePath;
+    },
     push,
     onChange: onChange as any,
     dispose: disposeRouter,
   };
-
-  // Listen for state changes
-  onChange('routes', match);
-  onChange('url', match);
 
   // Initial update
   navigationChanged();

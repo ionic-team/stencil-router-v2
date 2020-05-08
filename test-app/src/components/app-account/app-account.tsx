@@ -11,7 +11,7 @@ export class AppAccount {
     return (
       <Host>
         <h1>Account</h1>
-        <p>{Router.state.url.href}</p>
+        <p>{Router.url.href}</p>
       </Host>
     );
   }
