@@ -174,6 +174,13 @@ const Router = createRouter();
   tag: 'app-root',
 })
 export class AppRoot {
+  componentWillLoad() {
+    Router.onChange('url', (newValue: InternalRouterState['url'], _oldValue: InternalRouterState['url']) => {
+      // Access fields such as pathname, search, etc. from newValue
+
+      // This would be a good place to send a Google Analytics event, for example
+    });
+  }
 
   render() {
     const activePath = Router.state.activeRoute?.path;
