@@ -24,7 +24,7 @@ npm install stencil-router-v2 --save-dev
 ## Examples
 
 ```tsx
-import { createRouter } from 'stencil-router-v2';
+import { createRouter, Route } from 'stencil-router-v2';
 
 const Router = createRouter();
 
@@ -74,7 +74,9 @@ Regex or functional matches have the chance to generate an object of params when
 
 
 ```tsx
-import { createRouter, match } from 'stencil-router-v2';
+import { createRouter, Route, match } from 'stencil-router-v2';
+
+const Router = createRouter();
 
 <Host>
   <Router.Switch>
@@ -112,7 +114,9 @@ import { createRouter, match } from 'stencil-router-v2';
 The `href()` function will inject all the handles to an native `anchor`, without extra DOM.
 
 ```tsx
-import { href } from 'stencil-router-v2';
+import { createRouter, Route, href } from 'stencil-router-v2';
+
+const Router = createRouter();
 
 <Host>
   <Router.Switch>
@@ -166,7 +170,7 @@ export class AppRoot {
 Because the router uses `@stencil/store` its trivial to subscribe to changes in the locations, activeRoute, or even the list of routes.
 
 ```tsx
-import { createRouter } from 'stencil-router-v2';
+import { createRouter, Route } from 'stencil-router-v2';
 
 const Router = createRouter();
 
