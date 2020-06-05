@@ -117,12 +117,11 @@ export const href = (href: string, router: Router | undefined = defaultRouter) =
   return {
     href,
     onClick: (ev: MouseEvent) => {
-      console.log('Router href on click', ev);
       if (ev.metaKey || ev.ctrlKey) {
         return;
       }
 
-      if (ev.which == 2 || ev.button == 4) {
+      if (ev.which == 2 || ev.button == 1) {
         return;
       }
 
