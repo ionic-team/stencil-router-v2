@@ -101,7 +101,7 @@ export const Route: FunctionalComponent<RouteProps> = (props, children) => {
     } as any;
   }
   if (Build.isDev && props.render && children.length > 0) {
-    console.warn('Route: if `render` is provided, the component should not have any childreen');
+    console.warn('Route: if `render` is provided, the component should not have any children');
   }
   return {
     path: props.path,
