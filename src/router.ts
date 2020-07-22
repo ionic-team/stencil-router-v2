@@ -116,7 +116,15 @@ export const href = (href: string, router: Router | undefined = defaultRouter) =
   }
   return {
     href,
-    onClick: (ev: Event) => {
+    onClick: (ev: MouseEvent) => {
+      if (ev.metaKey || ev.ctrlKey) {
+        return;
+      }
+
+      if (ev.which == 2 || ev.button == 1) {
+        return;
+      }
+
       ev.preventDefault();
       router.push(href);
     },
