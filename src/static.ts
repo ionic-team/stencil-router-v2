@@ -21,8 +21,12 @@ export const staticState = (
   } else if (Build.isDev) {
     console.error('Static state can only be used in ')
     return (params, path) => {
-      console.log(params);
-      return mapFn(params, path);
+      params = mapFn(params, path);
+      if ('then' in params) {
+        console.error('Dev mode should provide syncronous static data.');
+        return {};
+      }
+      return params;
     };
   } else {
     return (_) => {
