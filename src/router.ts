@@ -116,7 +116,7 @@ export const Route: FunctionalComponent<RouteProps> = (props, children) => {
     return entry as any;
   }
   if (Build.isDev && props.render && children.length > 0) {
-    console.warn('Route: if `render()` is provided, the component should not have any childreen');
+    console.warn('Route: if `render` is provided, the component should not have any children');
   }
   const entry: RouteEntry = {
     path: props.path,
@@ -133,7 +133,15 @@ export const href = (href: string, router: Router | undefined = defaultRouter) =
   }
   return {
     href,
-    onClick: (ev: Event) => {
+    onClick: (ev: MouseEvent) => {
+      if (ev.metaKey || ev.ctrlKey) {
+        return;
+      }
+
+      if (ev.which == 2 || ev.button == 1) {
+        return;
+      }
+
       ev.preventDefault();
       router.push(href);
     },
