@@ -1,5 +1,5 @@
 import { Component, Prop, Host, h } from '@stencil/core';
-import { Route, href } from 'stencil-router-v2';
+import { Route, href, match, staticState, Params } from 'stencil-router-v2';
 import { Router } from '../../router';
 
 @Component({
@@ -35,9 +35,10 @@ export class AppRoot {
           </Route>
 
           <Route
-            path={/\/blog\/(?<page>.*)/}
-            render={({page}) => (
-              <h1>Blog {page}</h1>
+            path={match('/blog/:page')}
+            map={staticState(blogContent)}
+            render={({name}) => (
+              <h1>Blog {name}</h1>
             )}
           />
 
@@ -46,3 +47,9 @@ export class AppRoot {
     );
   }
 }
+
+const blogContent = ({page}: Params) => {
+  return {
+    name: `Page ${page}`
+  };
+};

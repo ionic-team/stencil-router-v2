@@ -7,14 +7,21 @@ import type {
   RouteEntry,
   RouteProps,
   RoutePath,
+  Params,
 } from './types';
 
+interface MatchResult {
+  params: Params;
+  route: RouteEntry;
+}
 let defaultRouter: Router | undefined;
 
 export const createRouter = (opts?: RouterOptions): Router => {
   const win = window;
   const url = new URL(win.location.href);
   const parseURL = opts?.parseURL ?? DEFAULT_PARSE_URL;
+  const beforePush = opts?.beforePush ?? (() => {return;});
+
   const { state, onChange, dispose } = createStore<InternalRouterState>({
     url,
     activePath: parseURL(url)
@@ -32,7 +39,7 @@ export const createRouter = (opts?: RouterOptions): Router => {
     state.activePath = parseURL(url);
   };
 
-  const match = (routes: RouteEntry[], ) => {
+  const match = (routes: RouteEntry[]): MatchResult | undefined => {
     const { activePath } = state;
     for (let route of routes) {
       const params = matchPath(activePath, route.path);
@@ -58,7 +65,11 @@ export const createRouter = (opts?: RouterOptions): Router => {
     const result = match(childrenRoutes);
     if (result) {
       if (typeof result.route.jsx === 'function') {
-        return result.route.jsx(result.params);
+        let params = result.params;
+        if (result.route.map) {
+          params = result.route.map(params);
+        }
+        return result.route.jsx(params);
       } else {
         return result.route.jsx;
       }
@@ -79,7 +90,10 @@ export const createRouter = (opts?: RouterOptions): Router => {
     get activePath() {
       return state.activePath;
     },
-    push,
+    push: async (href) => {
+      await beforePush(href);
+      push(href);
+    },
     onChange: onChange as any,
     dispose: disposeRouter,
   };
@@ -95,23 +109,26 @@ export const createRouter = (opts?: RouterOptions): Router => {
 
 export const Route: FunctionalComponent<RouteProps> = (props, children) => {
   if ('to' in props) {
-    return {
+    const entry: RouteEntry = {
       path: props.path,
       to: props.to,
-    } as any;
+    };
+    return entry as any;
   }
   if (Build.isDev && props.render && children.length > 0) {
-    console.warn('Route: if `render` is provided, the component should not have any childreen');
+    console.warn('Route: if `render()` is provided, the component should not have any childreen');
   }
-  return {
+  const entry: RouteEntry = {
     path: props.path,
     id: props.id,
     jsx: props.render ?? children,
-  } as any;
+    map: props.map,
+  };
+  return entry as any;
 };
 
 export const href = (href: string, router: Router | undefined = defaultRouter) => {
-  if (Build.isDev && !router) {
+  if (!router) {
     throw new Error('Router must be defined in href');
   }
   return {
@@ -123,7 +140,7 @@ export const href = (href: string, router: Router | undefined = defaultRouter) =
   };
 };
 
-const matchPath = (pathname: string, path: RoutePath): {[params: string]: any} => {
+const matchPath = (pathname: string, path: RoutePath): Params | undefined => {
   if (typeof path === 'string') {
     if (path === pathname) {
       return {};
@@ -136,7 +153,7 @@ const matchPath = (pathname: string, path: RoutePath): {[params: string]: any} =
         : { ...params };
     }
   } else {
-    const results = path.exec(pathname);
+    const results = path.exec(pathname) as any;
     if (results) {
       path.lastIndex = 0;
       return { ...results };

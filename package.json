@@ -21,18 +21,19 @@
     "store"
   ],
   "files": [
-    "dist"
+    "dist",
+    "static"
   ],
   "author": "Manu Mtz.-Almeida",
   "license": "MIT",
   "peerDependencies": {
-    "@stencil/core": ">=1.10.0"
+    "@stencil/core": ">=1.17.0"
   },
   "dependencies": {
     "@stencil/store": "^1.1.0"
   },
   "devDependencies": {
-    "@stencil/core": "^1.12.1",
+    "@stencil/core": "^1.17.0",
     "jest": "25.5.4",
     "jest-cli": "25.5.4",
     "np": "6.0.0",
