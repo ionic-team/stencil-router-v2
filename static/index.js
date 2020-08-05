@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 
-const afterHydrate = async (doc, _url, filePath) => {
+const afterHydrate = async (doc, _url, {filePath}) => {
   let data = doc.querySelector(`script[data-staticstate]`);
   if (!data) {
     data = doc.createElement('script');
