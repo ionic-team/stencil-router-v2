@@ -66,8 +66,8 @@ export const createRouter = (opts?: RouterOptions): Router => {
     if (result) {
       if (typeof result.route.jsx === 'function') {
         let params = result.params;
-        if (result.route.map) {
-          params = result.route.map(params);
+        if (result.route.mapParams) {
+          params = result.route.mapParams(params);
         }
         return result.route.jsx(params);
       } else {
@@ -122,7 +122,7 @@ export const Route: FunctionalComponent<RouteProps> = (props, children) => {
     path: props.path,
     id: props.id,
     jsx: props.render ?? children,
-    map: props.map,
+    mapParams: props.mapParams,
   };
   return entry as any;
 };

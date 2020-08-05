@@ -32,7 +32,7 @@ export interface RenderProps {
   path: RoutePath;
   id?: string;
 
-  map?: (params: Params, path: string) => State;
+  mapParams?: (params: Params, path: string) => State;
   render?: (params: Params) => any;
 }
 
@@ -44,7 +44,7 @@ export interface RedirectProps {
 export interface RouteEntry {
   path: RoutePath;
   jsx?: any;
-  map?: any;
+  mapParams?: any;
   to?: string;
   id?: string;
 }

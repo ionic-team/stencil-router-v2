@@ -36,7 +36,7 @@ export class AppRoot {
 
           <Route
             path={match('/blog/:page')}
-            map={staticState(blogContent)}
+            mapParams={staticState(blogContent)}
             render={({name}) => (
               <h1>Blog {name}</h1>
             )}
