@@ -33,14 +33,14 @@
     "@stencil/store": "^1.1.0"
   },
   "devDependencies": {
-    "@stencil/core": "^1.17.0",
-    "jest": "25.5.4",
-    "jest-cli": "25.5.4",
-    "np": "6.0.0",
+    "@stencil/core": "^1.17.3",
+    "jest": "^26.4.0",
+    "jest-cli": "26.4.0",
+    "np": "^6.4.0",
     "prettier": "^2.0.5",
-    "rollup": "^2.8.2",
-    "ts-jest": "^25.5.0",
-    "typescript": "^3.8.3"
+    "rollup": "^2.25.0",
+    "ts-jest": "^26.2.0",
+    "typescript": "^3.9.7"
   },
   "repository": {
     "type": "git",
