@@ -17,10 +17,7 @@
   "scripts": {
     "build": "../node_modules/.bin/stencil build",
     "start": "../node_modules/.bin/stencil build --dev --watch --serve",
-    "lint": "npm run lint.prettier",
-    "test": "../node_modules/.bin/stencil test --spec",
-    "test.ci": "npm run test",
-    "test.watch": "../node_modules/.bin/stencil test --spec --watchAll"
+    "lint": "npm run lint.prettier"
   },
   "license": "MIT",
   "dependencies": {

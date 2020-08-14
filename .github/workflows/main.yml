@@ -25,7 +25,6 @@ jobs:
           cd test-app
           npm link stencil-router-v2
           npm run build -- --ci
-          npm test
 
         env:
           CI: true
