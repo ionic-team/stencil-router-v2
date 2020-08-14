@@ -1,6 +1,5 @@
-
 export const then = () => {
   return Promise.resolve({
-    something: 42
-  })
+    something: 42,
+  });
 };

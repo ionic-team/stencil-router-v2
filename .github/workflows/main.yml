@@ -4,7 +4,6 @@ on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -12,22 +11,21 @@ jobs:
         node-version: [12.x]
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: npm install, build, and test
-      run: |
-        npm install
-        npm run build -- --ci
-        npm run test.ci
-        npm link
-        cd test-app
-        npm install
-        npm link @stencil/store
-        npm run build -- --ci
-        npm test
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install, build, and test
+        run: |
+          npm install
+          npm run build -- --ci
+          npm run test.ci
+          npm link
+          cd test-app
+          npm link stencil-router-v2
+          npm run build -- --ci
+          npm test
 
-      env:
-        CI: true
+        env:
+          CI: true

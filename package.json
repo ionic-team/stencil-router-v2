@@ -33,17 +33,17 @@
     "@stencil/store": "^1.1.0"
   },
   "devDependencies": {
-    "@stencil/core": "^1.17.3",
+    "@stencil/core": "^2.0.0-2",
     "jest": "^26.4.0",
     "jest-cli": "26.4.0",
     "np": "^6.4.0",
     "prettier": "^2.0.5",
     "rollup": "^2.25.0",
     "ts-jest": "^26.2.0",
-    "typescript": "^3.9.7"
+    "typescript": "^4.0.0-beta"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/manucorporat/stencil-router-v2.git"
+    "url": "git://github.com/ionic-team/stencil-router-v2.git"
   }
 }
