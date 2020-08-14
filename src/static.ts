@@ -45,11 +45,11 @@ const beforePush = async (path: string) => {
 };
 
 const getStatic = () => {
-  let staticDataElm = document.querySelector(`script[data-staticstate]`) as HTMLScriptElement | null;
+  let staticDataElm = document.getElementById('stencil-static-data') as HTMLScriptElement | null;
   if (!staticDataElm) {
     staticDataElm = document.createElement('script');
-    staticDataElm.setAttribute('type', 'application/json');
-    staticDataElm.setAttribute('data-staticstate', '');
+    staticDataElm.type = 'application/json';
+    staticDataElm.id = 'stencil-static-data';
     document.body.appendChild(staticDataElm);
   }
   return staticDataElm;
