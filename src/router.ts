@@ -1,14 +1,6 @@
 import { FunctionalComponent, Build } from '@stencil/core';
 import { createStore } from '@stencil/store';
-import type {
-  Router,
-  RouterOptions,
-  InternalRouterState,
-  RouteEntry,
-  RouteProps,
-  RoutePath,
-  Params,
-} from './types';
+import type { Router, RouterOptions, InternalRouterState, RouteEntry, RouteProps, RoutePath, Params } from './types';
 
 interface MatchResult {
   params: Params;
@@ -20,17 +12,24 @@ export const createRouter = (opts?: RouterOptions): Router => {
   const win = window;
   const url = new URL(win.location.href);
   const parseURL = opts?.parseURL ?? DEFAULT_PARSE_URL;
-  const beforePush = opts?.beforePush ?? (() => {return;});
+  const beforePush =
+    opts?.beforePush ??
+    (() => {
+      return;
+    });
 
-  const { state, onChange, dispose } = createStore<InternalRouterState>({
-    url,
-    activePath: parseURL(url)
-  }, (newV, oldV, prop) => {
-    if (prop === 'url') {
-      return newV.href !== oldV.href;
-    }
-    return newV !== oldV;
-  });
+  const { state, onChange, dispose } = createStore<InternalRouterState>(
+    {
+      url,
+      activePath: parseURL(url),
+    },
+    (newV, oldV, prop) => {
+      if (prop === 'url') {
+        return newV.href !== oldV.href;
+      }
+      return newV !== oldV;
+    },
+  );
 
   const push = (href: string) => {
     history.pushState(null, null as any, href);
@@ -48,7 +47,7 @@ export const createRouter = (opts?: RouterOptions): Router => {
           push(route.to);
           return match(routes);
         } else {
-          return {params, route};
+          return { params, route };
         }
       }
     }
@@ -82,7 +81,7 @@ export const createRouter = (opts?: RouterOptions): Router => {
     dispose();
   };
 
-  const router = defaultRouter = {
+  const router = (defaultRouter = {
     Switch,
     get url() {
       return state.url;
@@ -90,13 +89,13 @@ export const createRouter = (opts?: RouterOptions): Router => {
     get activePath() {
       return state.activePath;
     },
-    push: async (href) => {
+    push: async href => {
       await beforePush(href);
       push(href);
     },
     onChange: onChange as any,
     dispose: disposeRouter,
-  };
+  });
 
   // Initial update
   navigationChanged();
@@ -156,9 +155,7 @@ const matchPath = (pathname: string, path: RoutePath): Params | undefined => {
   } else if (typeof path === 'function') {
     const params = path(pathname);
     if (params) {
-      return params === true
-        ? {}
-        : { ...params };
+      return params === true ? {} : { ...params };
     }
   } else {
     const results = path.exec(pathname) as any;
@@ -170,8 +167,6 @@ const matchPath = (pathname: string, path: RoutePath): Params | undefined => {
   return undefined;
 };
 
-const DEFAULT_PARSE_URL = (url: URL) => {
-  return url.pathname.toLowerCase();
-};
+const DEFAULT_PARSE_URL = (url: URL) => url.pathname.toLowerCase();
 
 export const NotFound = () => ({});

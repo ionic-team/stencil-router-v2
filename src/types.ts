@@ -1,18 +1,15 @@
-import { FunctionalComponent } from '@stencil/core';
+import type { FunctionalComponent } from '@stencil/core';
 
-export type Params = {[prop: string]: string};
-export type State = {[prop: string]: any};
+export type Params = { [prop: string]: string };
+export type State = { [prop: string]: any };
 
-export type RoutePath =
-  | string
-  | RegExp
-  | ((path: string) => Params | boolean | undefined | null);
+export type RoutePath = string | RegExp | ((path: string) => Params | boolean | undefined | null);
 
 export type RouterState = Readonly<InternalRouterState>;
 
 export type OnChangeHandler<T extends keyof InternalRouterState> = (newValue: InternalRouterState[T], oldValue: InternalRouterState[T]) => void;
 
-  export interface Router {
+export interface Router {
   readonly Switch: FunctionalComponent<{}>;
   readonly url: URL;
   readonly activePath: string;
@@ -57,6 +54,5 @@ export interface InternalRouterState {
 export interface RouterOptions {
   parseURL?: (url: URL) => string;
   serializeURL?: (path: string) => URL;
-  
   beforePush?: (path: string) => void | Promise<void>;
 }

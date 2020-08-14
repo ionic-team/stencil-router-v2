@@ -1,16 +1,13 @@
 import { createRouter } from './router';
 import { Build } from '@stencil/core';
-import { Params, State } from './types';
+import type { Params, State } from './types';
 
-export const createStaticRouter = () => {
-  return createRouter({
+export const createStaticRouter = () =>
+  createRouter({
     beforePush,
   });
-};
 
-export const staticState = (
-  mapFn: (params: Params, path: string) => State | Promise<State>
-): ((params: State, path: string) => State) => {
+export const staticState = (mapFn: (params: Params, path: string) => State | Promise<State>): ((params: State, path: string) => State) => {
   if (Build.isServer) {
     return async (params, path) => {
       params = await mapFn(params, path);
@@ -19,7 +16,7 @@ export const staticState = (
       return params;
     };
   } else if (Build.isDev) {
-    console.error('Static state can only be used in ')
+    console.error('Static state can only be used in ');
     return (params, path) => {
       params = mapFn(params, path);
       if ('then' in params) {
@@ -29,10 +26,7 @@ export const staticState = (
       return params;
     };
   } else {
-    return (_) => {
-      const script = getStatic();
-      return JSON.parse(script.textContent!);
-    };
+    return () => JSON.parse(getStatic().textContent!);
   }
 };
 
@@ -51,12 +45,12 @@ const beforePush = async (path: string) => {
 };
 
 const getStatic = () => {
-  let data = document.querySelector(`script[data-staticstate]`) as HTMLScriptElement | null;
-  if (!data) {
-    data = document.createElement('script');
-    document.head.appendChild(data);
-    data.type = 'json';
-    data.setAttribute('data-staticstate', '');
+  let staticDataElm = document.querySelector(`script[data-staticstate]`) as HTMLScriptElement | null;
+  if (!staticDataElm) {
+    staticDataElm = document.createElement('script');
+    staticDataElm.setAttribute('type', 'application/json');
+    staticDataElm.setAttribute('data-staticstate', '');
+    document.body.appendChild(staticDataElm);
   }
-  return data;
+  return staticDataElm;
 };

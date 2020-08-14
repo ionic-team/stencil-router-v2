@@ -11,11 +11,11 @@ interface CompileOptions {
 }
 
 let cacheCount = 0;
-const patternCache: {[key: string]: any } = {};
+const patternCache: { [key: string]: any } = {};
 const cacheLimit = 10000;
 
 // Memoized function for creating the path match regex
-const compilePath = (pattern: Path, options: CompileOptions): { re: RegExp, keys: Key[]} => {
+const compilePath = (pattern: Path, options: CompileOptions): { re: RegExp; keys: Key[] } => {
   const cacheKey = `${options.end}${options.strict}`;
   const cache = patternCache[cacheKey] || (patternCache[cacheKey] = {});
   const cachePattern = JSON.stringify(pattern);
@@ -34,7 +34,7 @@ const compilePath = (pattern: Path, options: CompileOptions): { re: RegExp, keys
   }
 
   return compiledPattern;
-}
+};
 
 export const match = (pathname: string, options: MatchOptions = {}) => {
   const { exact = false, strict = false } = options;
@@ -44,7 +44,7 @@ export const match = (pathname: string, options: MatchOptions = {}) => {
     if (!match) {
       return undefined;
     }
-    const [ url, ...values ] = match;
+    const [url, ...values] = match;
     const isExact = path === url;
     if (exact && !isExact) {
       return undefined;
@@ -52,6 +52,6 @@ export const match = (pathname: string, options: MatchOptions = {}) => {
     return keys.reduce((memo, key: Key, index) => {
       memo[key.name] = values[index];
       return memo;
-    }, {} as {[key: string]: string})
+    }, {} as { [key: string]: string });
   };
-}
+};
