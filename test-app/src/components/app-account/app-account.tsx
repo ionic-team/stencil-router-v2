@@ -3,15 +3,13 @@ import { Router } from '../../router';
 
 @Component({
   tag: 'app-account',
-  shadow: false,
 })
 export class AppAccount {
-
   render() {
     return (
       <Host>
         <h1>Account</h1>
-        <p>{Router.url.href}</p>
+        <p>{Router.path}</p>
       </Host>
     );
   }
