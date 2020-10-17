@@ -2,17 +2,15 @@
   "name": "stencil-router-v2",
   "version": "0.5.0",
   "description": "New router based in @stencil/store",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rm -rf dist && tsc -p . && npm run rollup",
     "lint.prettier": "prettier --write 'src/**/*.ts'",
     "release": "np",
     "rollup": "rollup -c rollup.config.js",
-    "test": "jest --passWithNoTests",
-    "test.ci": "npm run test && npm run test.prettier",
-    "test.prettier": "prettier --check 'src/**/*.ts'",
+    "test": "stencil test --spec",
     "version": "npm run build"
   },
   "keywords": [
@@ -21,28 +19,29 @@
     "store"
   ],
   "files": [
-    "dist"
+    "dist",
+    "static"
   ],
   "author": "Manu Mtz.-Almeida",
   "license": "MIT",
   "peerDependencies": {
-    "@stencil/core": ">=1.10.0"
+    "@stencil/core": ">=2.1.0-2"
   },
   "dependencies": {
     "@stencil/store": "^1.1.0"
   },
   "devDependencies": {
-    "@stencil/core": "^1.12.1",
-    "jest": "25.5.4",
-    "jest-cli": "25.5.4",
-    "np": "6.0.0",
-    "prettier": "^2.0.5",
-    "rollup": "^2.8.2",
-    "ts-jest": "^25.5.0",
-    "typescript": "^3.8.3"
+    "@stencil/core": "^2.1.0-2",
+    "@types/jest": "^26.0.12",
+    "jest": "^26.5.3",
+    "jest-cli": "^26.5.3",
+    "np": "^6.5.0",
+    "prettier": "^2.1.2",
+    "rollup": "^2.32.0",
+    "typescript": "^4.0.3"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/manucorporat/stencil-router-v2.git"
+    "url": "git://github.com/ionic-team/stencil-router-v2.git"
   }
 }

@@ -6,7 +6,6 @@ import { Router } from '../../router';
   shadow: false,
 })
 export class AppAccount {
-
   render() {
     return (
       <Host>
