@@ -187,13 +187,11 @@ export class AppRoot {
   }
 
   render() {
-    const activePath = Router.state.activeRoute?.path;
-
     return (
       <Host>
         <aside>
-          <a class={{'active': activePath === '/main'}}>Main</a>
-          <a class={{'active': activePath === '/account'}}>Account</a>
+          <a class={{'active': Router.activePath === '/main'}}>Main</a>
+          <a class={{'active': Router.activePath === '/account'}}>Account</a>
         </aside>
 
         <Router.Switch>
