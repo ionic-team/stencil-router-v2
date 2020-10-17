@@ -2,17 +2,15 @@
   "name": "stencil-router-v2",
   "version": "0.5.0",
   "description": "New router based in @stencil/store",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rm -rf dist && tsc -p . && npm run rollup",
     "lint.prettier": "prettier --write 'src/**/*.ts'",
     "release": "np",
     "rollup": "rollup -c rollup.config.js",
-    "test": "jest --passWithNoTests",
-    "test.ci": "npm run test && npm run test.prettier",
-    "test.prettier": "prettier --check 'src/**/*.ts'",
+    "test": "stencil test --spec",
     "version": "npm run build"
   },
   "keywords": [
@@ -27,20 +25,20 @@
   "author": "Manu Mtz.-Almeida",
   "license": "MIT",
   "peerDependencies": {
-    "@stencil/core": ">=1.17.0"
+    "@stencil/core": ">=2.1.0-2"
   },
   "dependencies": {
     "@stencil/store": "^1.1.0"
   },
   "devDependencies": {
-    "@stencil/core": "^2.0.0-2",
-    "jest": "^26.4.0",
-    "jest-cli": "26.4.0",
-    "np": "^6.4.0",
-    "prettier": "^2.0.5",
-    "rollup": "^2.25.0",
-    "ts-jest": "^26.2.0",
-    "typescript": "^4.0.0-beta"
+    "@stencil/core": "^2.1.0-2",
+    "@types/jest": "^26.0.12",
+    "jest": "^26.5.3",
+    "jest-cli": "^26.5.3",
+    "np": "^6.5.0",
+    "prettier": "^2.1.2",
+    "rollup": "^2.32.0",
+    "typescript": "^4.0.3"
   },
   "repository": {
     "type": "git",

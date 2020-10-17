@@ -45,13 +45,26 @@ export const match = (pathname: string, options: MatchOptions = {}) => {
       return undefined;
     }
     const [url, ...values] = match;
-    const isExact = path === url;
-    if (exact && !isExact) {
+    if (exact && path !== url) {
       return undefined;
     }
     return keys.reduce((memo, key: Key, index) => {
       memo[key.name] = values[index];
       return memo;
     }, {} as { [key: string]: string });
+  };
+};
+
+export const matchAny = (pathnames: string[], options: MatchOptions = {}) => {
+  const matchFns = pathnames.map(pathname => match(pathname, options));
+  return (path: string) => {
+    let result: { [key: string]: string } | undefined;
+    for (const matchFn of matchFns) {
+      result = matchFn(path);
+      if (result) {
+        break;
+      }
+    }
+    return result;
   };
 };
