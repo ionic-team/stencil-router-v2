@@ -1,5 +1,19 @@
-# stencil-router-v2
+# stencil-router-v2 (to be archived)
 
+⚠️ This project will be archived in the near future. ⚠️
+
+This project is slated to be archived by the Stencil team. Stencil Router V2 was an experimental router
+that did not reach v1.0 status, and should be considered unsupported.
+
+Individuals and teams looking for a Stencil-based router solution should see the
+[Stencil Router project](https://github.com/ionic-team/stencil-router).
+
+The project can continue to be downloaded in its current state from the NPM registry, and may
+be forked by individuals wishing to build directly off of it.
+
+The documentation below is kept for historical purposes only.
+
+---
 Stencil Router V2 is an experimental new router for stencil that focus in:
 
 - **Lightweight** (600bytes)
