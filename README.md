@@ -53,7 +53,7 @@ export class AppRoot {
         <Router.Switch>
 
           <Route path="/">
-            <h1>Welcome<h1>
+            <h1>Welcome</h1>
             <p>Welcome to the new stencil-router demo</p>
           </Route>
 
